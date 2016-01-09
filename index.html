@@ -3,14 +3,70 @@
     <head>
         <title>Displacement mapping</title>
         <meta charset="UTF-8"/>
+
+        <!-- common files -->
+        <script type="text/javascript" src="gltp1_fichiers/glMatrix-0.js"></script>
+        <script type="text/javascript" src="gltp1_fichiers/webgl-utils.js"></script>
+
+        <!-- atomicGL engine -->
+        <!-- modules -->
+        <script type="text/javascript" src="atomicGLContext.js"></script>
+        <script type="text/javascript" src="atomicGLMatrixStack.js"></script>
+
+        <script type="text/javascript" src="atomicGLClock.js"></script>
+
+        <script type="text/javascript" src="atomicGLShader.js"></script>
+        <script type="text/javascript" src="atomicGLwaveShader.js"></script>
+        <script type="text/javascript" src="atomicGLxzPlane.js"></script>
+
+        <!-- objects -->
+        <script type="text/javascript">
+var agl = new atomicGLContext();
+var sceneClock = new atomicGLClock();
+var ams = new atomicGLMatrixStack();
+
+var testPlane = new atomicGLxzPlane("test_plane",1,1,1,1);
+var angle = 0.0;
+
+function webGLStart()
+{
+    var canvas = document.getElementById("oglcanvas");
+    agl.initGL(canvas, [1.0, 1.0, 1.0]);
+    agl.pushLight([5.0, 5.0, -10.0], [1.0, 1.0, 1.0]);
+    agl.ambientLightColor = [0.1, 0.1, 0.1];
+
+    ams.initMatrix(agl, 45);//FOV
+}
+
+function sceneDraw()
+{
+    agl.initDraw();
+
+    ams.mvPushMatrix();
+    ams.mvPopMatrix();
+}
+
+function nextFrame()
+{
+    requestAnimFrame(nextFrame);
+    sceneDraw();
+    animate();
+}
+
+function animate()
+{
+    sceneClock.tick();
+    angle = angle + 0.1*sceneClock.get();
+}
+        </script>
     </head>
-    <body>
+    <body onLoad="webGLStart();">
         <h1>Displacement mapping</h1>
         <form>
             <input type="checkbox" id="displacementMapping" />
             <label for="displacementMapping"> activer le displacement mapping</label>
         </form>
-        <canvas width="600px" height="400px">
+        <canvas id="oglcanvas" width="600px" height="400px">
         </canvas>
     </body>
 </html>
