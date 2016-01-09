@@ -19,13 +19,53 @@
         <script type="text/javascript" src="atomicGLwaveShader.js"></script>
         <script type="text/javascript" src="atomicGLxzPlane.js"></script>
 
+        <!-- shaders -->
+        <script id="bump_vert" type="x-shader/x-vertex">
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
+attribute vec3 aVertexColor;
+
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+uniform mat3 uNMatrix;
+
+uniform vec3 uAmbientColor;
+
+varying vec3 vcolor;
+
+void main(void)
+{
+    vec4 mvPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+    gl_Position = uPMatrix * mvPosition;
+
+    vcolor = uAmbientColor + aVertexColor;
+}
+        </script>
+        <script id="bump_frag" type="x-shader/x-fragment">
+#ifdef GL_ES
+    precision highp float;
+#endif
+
+varying vec3 vcolor;
+
+void main(void)
+{
+    gl_FragColor = vec4(vcolor, 1.0);
+}
+        </script>
+
         <!-- objects -->
         <script type="text/javascript">
 var agl = new atomicGLContext();
 var sceneClock = new atomicGLClock();
 var ams = new atomicGLMatrixStack();
 
-var testPlane = new atomicGLxzPlane("test_plane",1,1,1,1);
+//bump mapping
+var bumpProg;
+var bumpProgId;
+
+var testPlane = new atomicGLxzPlane("test_plane",5,10,2,2);
+
 var angle = 0.0;
 
 function webGLStart()
@@ -33,9 +73,17 @@ function webGLStart()
     var canvas = document.getElementById("oglcanvas");
     agl.initGL(canvas, [1.0, 1.0, 1.0]);
     agl.pushLight([5.0, 5.0, -10.0], [1.0, 1.0, 1.0]);
-    agl.ambientLightColor = [0.1, 0.1, 0.1];
+    agl.ambientLightColor = [0.01, 0.01, 0.2];
 
     ams.initMatrix(agl, 45);//FOV
+
+    bumpProg = new atomicGLShader("bump", agl, "bump_frag", "bump_vert", false, 0);
+    bumpProgId = agl.pushProgram(bumpProg);
+
+    testPlane.setFaceColor("All", [0.5, 0.5, 0.5]);
+    testPlane.initGLBuffers(agl);
+
+    nextFrame();
 }
 
 function sceneDraw()
@@ -43,6 +91,18 @@ function sceneDraw()
     agl.initDraw();
 
     ams.mvPushMatrix();
+
+        ams.mvTranslate(0, -2, -20);
+        ams.mvRotate(20, [1,0,0]);
+
+        ams.mvPushMatrix();
+
+            ams.mvTranslate(0,0,-5);
+            ams.mvRotate(angle, [0,1,0]);
+            testPlane.draw(agl, ams, bumpProgId);
+
+        ams.mvPopMatrix();
+
     ams.mvPopMatrix();
 }
 
@@ -56,7 +116,7 @@ function nextFrame()
 function animate()
 {
     sceneClock.tick();
-    angle = angle + 0.1*sceneClock.get();
+    angle = angle + 0.02*sceneClock.get();
 }
         </script>
     </head>
