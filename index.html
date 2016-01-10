@@ -54,15 +54,57 @@ void main(void)
 }
         </script>
 
+        <script id="displacement_vert" type="x-shader/x-vertex">
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
+attribute vec3 aVertexColor;
+
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+uniform mat3 uNMatrix;
+
+uniform vec3 uAmbientColor;
+
+varying vec3 vcolor;
+
+void main(void)
+{
+    //TODO
+    vec4 mvPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+    gl_Position = uPMatrix * mvPosition;
+
+    vcolor = vec3(0.0, 0.0, 1.0);
+}
+        </script>
+
+        <script id="displacement_frag" type="x-shader/x-fragment">
+#ifdef GL_ES
+    precision highp float;
+#endif
+
+varying vec3 vcolor;
+
+void main(void)
+{
+    gl_FragColor = vec4(vcolor, 1.0);
+}
+        </script>
+
         <!-- objects -->
         <script type="text/javascript">
 var agl = new atomicGLContext();
 var sceneClock = new atomicGLClock();
 var ams = new atomicGLMatrixStack();
 
+var progId;
+
 //bump mapping
 var bumpProg;
 var bumpProgId;
+
+//displacement mapping
+var displacementProg;
+var displacementProgId;
 
 var testPlane = new atomicGLxzPlane("test_plane",5,10,2,2);
 
@@ -80,8 +122,13 @@ function webGLStart()
     bumpProg = new atomicGLShader("bump", agl, "bump_frag", "bump_vert", false, 0);
     bumpProgId = agl.pushProgram(bumpProg);
 
+    displacementProg = new atomicGLShader("displacement", agl, "displacement_frag", "displacement_vert", false, 0);
+    displacementProgId = agl.pushProgram(displacementProg);
+
     testPlane.setFaceColor("All", [0.5, 0.5, 0.5]);
     testPlane.initGLBuffers(agl);
+
+    setShader();
 
     nextFrame();
 }
@@ -99,7 +146,7 @@ function sceneDraw()
 
             ams.mvTranslate(0,0,-5);
             ams.mvRotate(angle, [0,1,0]);
-            testPlane.draw(agl, ams, bumpProgId);
+            testPlane.draw(agl, ams, progId);
 
         ams.mvPopMatrix();
 
@@ -118,13 +165,21 @@ function animate()
     sceneClock.tick();
     angle = angle + 0.02*sceneClock.get();
 }
+
+function setShader()
+{
+    if(document.getElementById("chbx").checked)
+        progId = displacementProgId;
+    else
+        progId = bumpProgId;
+}
         </script>
     </head>
     <body onLoad="webGLStart();">
         <h1>Displacement mapping</h1>
         <form>
-            <input type="checkbox" id="displacementMapping" />
-            <label for="displacementMapping"> activer le displacement mapping</label>
+            <input type="checkbox" id="chbx" onClick="setShader();" />
+            <label for="chbx"> activer le displacement mapping</label>
         </form>
         <canvas id="oglcanvas" width="600px" height="400px">
         </canvas>
