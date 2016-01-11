@@ -12,10 +12,12 @@
         <!-- modules -->
         <script type="text/javascript" src="atomicGLContext.js"></script>
         <script type="text/javascript" src="atomicGLMatrixStack.js"></script>
+        <script type="text/javascript" src="atomicGLTexture.js"></script>
 
         <script type="text/javascript" src="atomicGLClock.js"></script>
 
         <script type="text/javascript" src="atomicGLShader.js"></script>
+        <script type="text/javascript" src="atomicGLDisplacementShader.js"></script>
         <script type="text/javascript" src="atomicGLwaveShader.js"></script>
         <script type="text/javascript" src="atomicGLxzPlane.js"></script>
 
@@ -119,10 +121,15 @@ function webGLStart()
 
     ams.initMatrix(agl, 45);//FOV
 
+    //textures
+    var heightMap = new atomicGLTexture("texture/heightmap.png", "color", agl);
+    var normalMap = new atomicGLTexture("texture/normalmap.png", "color", agl);
+    var texture = new atomicGLTexture("texture/texture.png", "color", agl);
+
     bumpProg = new atomicGLShader("bump", agl, "bump_frag", "bump_vert", false, 0);
     bumpProgId = agl.pushProgram(bumpProg);
 
-    displacementProg = new atomicGLShader("displacement", agl, "displacement_frag", "displacement_vert", false, 0);
+    displacementProg = new atomicGLDisplacementShader("displacement", agl, "displacement_frag", "displacement_vert", 1);
     displacementProgId = agl.pushProgram(displacementProg);
 
     testPlane.setFaceColor("All", [0.5, 0.5, 0.5]);
@@ -178,7 +185,7 @@ function setShader()
     <body onLoad="webGLStart();">
         <h1>Displacement mapping</h1>
         <form>
-            <input type="checkbox" id="chbx" onClick="setShader();" />
+            <input type="checkbox" id="chbx" onClick="setShader();"/>
             <label for="chbx"> activer le displacement mapping</label>
         </form>
         <canvas id="oglcanvas" width="600px" height="400px">
