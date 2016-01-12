@@ -20,28 +20,27 @@
 	
 	void main(void){
 	
-	// Project position into screen space
-	// and pass through texture coordinate
-	vProjCoord = mul(uModelViewProj, vec4(aObjCoord,1));
-	vTexCoord = vec3(aTexCoord,1);
-	
-	// Transform the eye vector into tangent space.
-	// Adjust the slope in tangent space based on bump depth
-	vec3 eyeVec = uEyeCoord - aObjCoord;
-	vec3 tanEyeVec;
-	tanEyeVec.x= dot(aObjTangent, eyeVec);
-	tanEyeVec.y= dot(aObjBinormal, eyeVec);
-	tanEyeVec.z= -uInvBumpDepth * dot(aObjTangent, eyeVec);
-	
-	// Transform the light vector into tangent space.
-	// We will use this later for tangent-space normal mapping
-	vec3 lightVec = uLightCoord - aObjCoord;
-	vec3 tanLightVec;
-	tanLightVec.x = dot(aObjTangent, lightVec);
-	tanLightVec.y = dot(aObjBinormal, lightVec);
-	tanLightVec.z = dot(aObjNormal, lightVec);
+		// Project position into screen space
+		// and pass through texture coordinate
+		vProjCoord = mul(uModelViewProj, vec4(aObjCoord,1));
+		vTexCoord = vec3(aTexCoord,1);
+		
+		// Transform the eye vector into tangent space.
+		// Adjust the slope in tangent space based on bump depth
+		vec3 eyeVec = uEyeCoord - aObjCoord;
+		vec3 tanEyeVec;
+		tanEyeVec.x= dot(aObjTangent, eyeVec);
+		tanEyeVec.y= dot(aObjBinormal, eyeVec);
+		tanEyeVec.z= -uInvBumpDepth * dot(aObjTangent, eyeVec);
+		
+		// Transform the light vector into tangent space.
+		// We will use this later for tangent-space normal mapping
+		vec3 lightVec = uLightCoord - aObjCoord;
+		vec3 tanLightVec;
+		tanLightVec.x = dot(aObjTangent, lightVec);
+		tanLightVec.y = dot(aObjBinormal, lightVec);
+		tanLightVec.z = dot(aObjNormal, lightVec);
 
-	vTanLightVec = tanLightVec;
-	
+		vTanLightVec = tanLightVec;
 	}
 </script>
