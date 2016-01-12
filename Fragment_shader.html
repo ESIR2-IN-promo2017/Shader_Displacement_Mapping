@@ -1,0 +1,64 @@
+<script id="frag_shader" type="x-shader/x-fragment">
+	
+	// varyings
+	varying vec3 vTanEyeVec;
+	varying vec3 vTexCoord;
+	varying vec3 vTanLightVec;
+	
+	
+	// uniforms
+	uniform sampler2D uColorTex;
+	uniform sampler2D uNormalTex;
+	uniform sampler2D uSampler2;
+	uniform sampler2D uSampler3;
+	uniform sampler2D uSampler4;
+	uniform sampler2D uSampler5;
+	uniform sampler2D uSampler6;
+	uniform sampler2D uSampler7;
+	uniform sampler2D uSampler8;
+	uniform sampler2D uSampler9;
+	uniform sampler2D uSampler10;
+	uniform sampler2D uSampler11;
+	uniform sampler2D uSampler12;
+	uniform sampler2D uSampler13;
+	uniform sampler2D uSampler14;
+	uniform sampler2D uSampler15;
+	uniform sampler2D uSampler16;
+	uniform sampler2D uSampler17;
+	uniform sampler2D uSampler18;
+	uniform vec3 uNormalizationFactor;
+	
+	void main(void){
+	// Normalize the offset vector in texture space.
+	// The normalization factor ensures we are normalized with respect
+	// to a distance which is defined in terms of pixels.
+	vec3 offset = normalize(vTanEyeVec);
+	offset*= uNormalizationFactor;
+	vec3 texCoord = vTexCoord;
+	
+	// March a ray
+	for(int i=0; i< NUM_ITERATIONS; i++){
+//???????????????????????????????
+	// float distance = f1tex3D(distanceTex, texCoord);
+	// texCoord+= distance*offset;
+	}
+	
+	// Compute derivatives of unperturbed texcoords.
+	// This is because the offset texcoords will have discontinuities
+	// which lead to incorrect filtering.
+	vec2 dx = ddx(vTexCoord.xy);
+	vec2 dy = ddy(vTexCoord.xy);
+	
+	// Do bump-mapped lighting in tangent space.
+	// 'normalTex' stores tangent-space normals remapped
+	// into the range [0, 1].
+//???????????????????????????????
+	//vec3 tanNormal = 2*f3tex2D(normalTex, texCoord.xy, dx, dy) - 1;
+	vec3 tanLightVec= normalize(vTanLightVec);
+	float diffuse = dot(tanNormal, tanLightVec);
+
+	// Multiply diffuse lighting by texture color
+//???????????????????????????????	
+	//gl_FragColor = diffuse * f3tex2D(colorTex, texCoord.xy, dx, dy);
+	}
+</script>
