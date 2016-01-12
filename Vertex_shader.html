@@ -31,7 +31,7 @@
 	vec3 tanEyeVec;
 	tanEyeVec.x= dot(aObjTangent, eyeVec);
 	tanEyeVec.y= dot(aObjBinormal, eyeVec);
-	tanEyeVec.z= -invBumpDepth * dot(aObjTangent, eyeVec);
+	tanEyeVec.z= -uInvBumpDepth * dot(aObjTangent, eyeVec);
 	
 	// Transform the light vector into tangent space.
 	// We will use this later for tangent-space normal mapping
