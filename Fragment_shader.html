@@ -37,9 +37,19 @@
 		vec3 texCoord = vTexCoord;
 		
 		// March a ray
+		int NUM_ITERATIONS = 16;
 		for(int i=0; i< NUM_ITERATIONS; i++){
 			// à adapter: ----------------------------------------------------------
-			float distance = f1tex3D(distanceTex, texCoord);
+			//float distance = f1tex3D(distanceTex, texCoord);
+			float distance = min(float(uSampler2, texCoord),float(uSampler3, texCoord),
+							float(uSampler4, texCoord),float(uSampler5, texCoord),
+							float(uSampler6, texCoord),float(uSampler7, texCoord),
+							float(uSampler8, texCoord),float(uSampler9, texCoord),
+							float(uSampler10, texCoord),float(uSampler11, texCoord),
+							float(uSampler12, texCoord),float(uSampler13, texCoord),
+							float(uSampler14, texCoord),float(uSampler15, texCoord),
+							float(uSampler16, texCoord),float(uSampler17, texCoord),
+							float(uSampler18, texCoord));
 			// ---------------------------------------------------------------------
 			texCoord+= distance*offset;
 		}
@@ -54,14 +64,14 @@
 		// 'normalTex' stores tangent-space normals remapped
 		// into the range [0, 1].
 		// à adapter: --------------------------------------------------------------
-		vec3 tanNormal = 2* (normalTex, texCoord.xy, dx, dy) - 1;
+		vec3 tanNormal = 2 * (normalTex, texCoord.xy, dx, dy) - 1;
 		// -------------------------------------------------------------------------
 		vec3 tanLightVec= normalize(vTanLightVec);
 		float diffuse = dot(tanNormal, tanLightVec);
 
 		// Multiply diffuse lighting by texture color
 		// à adapter: --------------------------------------------------------------
-		gl_FragColor = diffuse * f3tex2D(colorTex, texCoord.xy, dx, dy);
+		gl_FragColor = vec4(diffuse * vec3(uColorTex, texCoord.xy, dx, dy), 1);
 		// -------------------------------------------------------------------------
 	}
 </script>
