@@ -56,8 +56,9 @@ atomicGLDisplacementShader = function(nname, agl,fragmentShaderID, vertexShaderI
 		this.pointLightLocationUniform = [] ;
 		this.pointLightColorUniform = [] ;
 		// texture -sampler
-		this.samplerUniform = [] ;
-	
+		this.normalMapUniform;
+        this.distanceMapUniform;
+        this.colorTextureUniform;
 
     this.setColorTexture = function setColorTexture(colorTexture)
     {
@@ -210,6 +211,9 @@ atomicGLDisplacementShader = function(nname, agl,fragmentShaderID, vertexShaderI
 			// console.log("atomicGLShader::createProgram - getUniformLocation ->"+"uSampler"+i);
 			this.samplerUniform[i] = agl.gl.getUniformLocation(program, "uSampler"+i);
 		}
+        this.colorTextureUniform = agl.gl.getUniformLocation(program, "uColorTexture");
+        this.distanceMapUniform = agl.gl.getUniformLocation(program, "uDistanceMap");
+        this.normalMapUniform = agl.gl.getUniformLocation(program, "uNormalMap");
 		
         return program;
     }	
@@ -251,8 +255,14 @@ atomicGLDisplacementShader = function(nname, agl,fragmentShaderID, vertexShaderI
 			aGL.gl.uniform3f(this.pointLightLocationUniform[i], aGL.omniLightLocation[i*3+0], aGL.omniLightLocation[i*3+1], aGL.omniLightLocation[i*3+2]);
 			aGL.gl.uniform3f(this.pointLightColorUniform[i],aGL.omniLightColor[i*3+0],aGL.omniLightColor[i*3+1],aGL.omniLightColor[i*3+2]);
 		}
-		
-		// textures
+
+        //textures
+			// agl.gl.activeTexture(agl.GLtexture[i]);
+			// agl.gl.bindTexture(aGL.gl.TEXTURE_2D, this.textures[i].texture);
+			// agl.gl.uniform1i(aGL.shaderPrograms[idProg].samplerUniform[i], i);
+
+        aGL.gl.activeTexture(aGL.GLtexture[0]);
+        aGL.gl.bindTexture(aGL.gl.TEXTURE_2D, this.colorTexture.texture);
     }
 	
 	// init
