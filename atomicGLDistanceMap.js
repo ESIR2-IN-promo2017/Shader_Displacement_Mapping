@@ -33,6 +33,7 @@ atomicGLDistanceMap = function(dataArray, height, width, aagl){
     aagl.gl.bindTexture(aagl.gl.TEXTURE_2D, this.texture);
     var type = aagl.gl.LUMINANCE;
     aagl.gl.texImage2D(aagl.gl.TEXTURE_2D, 0, type, width, height, 0, type, aagl.gl.UNSIGNED_BYTE, dataTypedArray);
+    aagl.gl.generateMipmap(aagl.gl.TEXTURE_2D);
     aagl.gl.bindTexture(aagl.gl.TEXTURE_2D, null);
     this.loaded = true;
 }
