@@ -16,7 +16,7 @@
 // aagl:		atomicGL context
 
 
-atomicGLTexture = function(dataArray, height, width, aagl){
+atomicGLDistanceMap = function(dataArray, height, width, aagl){
 	// debug
 	// console.log("atomicGLDistanceMap::constructor()");
 	// attributes
@@ -25,11 +25,14 @@ atomicGLTexture = function(dataArray, height, width, aagl){
 	this.agl = aagl ;
 	// texture type
 	this.type = "displacement" ;
+
 	// ogl texture
     this.texture = aagl.gl.createTexture();
+
     var dataTypedArray = new Uint8Array(dataArray);
     aagl.gl.bindTexture(aagl.gl.TEXTURE_2D, this.texture);
-    aagl.gl.texImage2D(aagl.gl.TEXTURE_2D, 0, aagl.gl.LUMINANCE, aagl.gl.UNSIGNED_BYTE, dataTypedArray);
+    var type = aagl.gl.LUMINANCE;
+    aagl.gl.texImage2D(aagl.gl.TEXTURE_2D, 0, type, width, height, 0, type, aagl.gl.UNSIGNED_BYTE, dataTypedArray);
     aagl.gl.bindTexture(aagl.gl.TEXTURE_2D, null);
     this.loaded = true;
 }

@@ -22,6 +22,10 @@
         <script type="text/javascript" src="atomicGLxzPlane.js"></script>
         <script type="text/javascript" src="atomicGLCube.js"></script>
 
+        <!-- distance map & height map -->
+        <script type="text/javascript" src="atomicGLDistanceMap.js"></script>
+        <script type="text/javascript" src="heightmap.js"></script>
+
         <!-- shaders -->
         <script id="bump_vert" type="x-shader/x-vertex">
 attribute vec3 aVertexPosition;
@@ -131,6 +135,10 @@ var testItem = new atomicGLCube("test_item", 1, 10, 10, 1, 1);
 
 var angle = 0.0;
 
+function calculateDistanceMap(heightMap, item)
+{
+}
+
 function webGLStart()
 {
     var canvas = document.getElementById("oglcanvas");
@@ -141,8 +149,8 @@ function webGLStart()
     ams.initMatrix(agl, 45);//FOV
 
     var colorTexture = new atomicGLTexture("textures/texture_shadow.png", "color", agl);
-    var heightMap = new atomicGLTexture("textures/heightmap.png", "colr", agl);
     var normalMap = new atomicGLTexture("textures/normalmap.png", "color", agl);
+    //var distanceMap = new atomicGLDistanceMap(heightMapArray, heightMapHeight, heightMapWidth, agl);
 
     bumpProg = new atomicGLShader("bump", agl, "bump_frag", "bump_vert", 1, 1);
     bumpProgId = agl.pushProgram(bumpProg);
@@ -152,6 +160,8 @@ function webGLStart()
 
     testItem.setFaceColor("All", [0.5, 0.5, 0.5]);
     testItem.pushTexture(colorTexture);
+    calculateDistanceMap(heightMapArray, testItem);
+    //testItem.pushTexture(distanceMap);
     testItem.initGLBuffers(agl);
 
     setShader();
