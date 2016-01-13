@@ -137,6 +137,11 @@ var angle = 0.0;
 
 function calculateDistanceMap(heightMap, item)
 {
+    for(var h = 0; h < 16; ++h)
+    {
+        var distanceMapSlice = new atomicGLDistanceMap(distanceMapArray[h], heightMapHeight, heightMapWidth, agl);
+        item.pushTexture(distanceMapSlice);
+    }
 }
 
 function webGLStart()
@@ -150,7 +155,6 @@ function webGLStart()
 
     var colorTexture = new atomicGLTexture("textures/texture_shadow.png", "color", agl);
     var normalMap = new atomicGLTexture("textures/normalmap.png", "color", agl);
-    //var distanceMap = new atomicGLDistanceMap(heightMapArray, heightMapHeight, heightMapWidth, agl);
 
     bumpProg = new atomicGLShader("bump", agl, "bump_frag", "bump_vert", 1, 1);
     bumpProgId = agl.pushProgram(bumpProg);
@@ -161,7 +165,6 @@ function webGLStart()
     testItem.setFaceColor("All", [0.5, 0.5, 0.5]);
     testItem.pushTexture(colorTexture);
     calculateDistanceMap(heightMapArray, testItem);
-    //testItem.pushTexture(distanceMap);
     testItem.initGLBuffers(agl);
 
     setShader();
