@@ -1,4 +1,12 @@
 *.swp
+*.swo
 *.out
 *.exe
-*.pdf
+
+#latex
+*.aux
+*.nav
+*.out
+*.log
+*.snm
+*.toc
