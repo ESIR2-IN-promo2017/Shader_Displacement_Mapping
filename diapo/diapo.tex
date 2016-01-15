@@ -73,13 +73,13 @@
             \centering
             \includegraphics[width=0.9\textwidth]{images/tesselation_off}\\
             \includegraphics[width=0.9\textwidth]{images/tesselation_off_mesh}\\
-            Tessellation on
+            Tessellation off
         \end{column}
         \begin{column}{0.5\textwidth}
             \centering
             \includegraphics[width=0.9\textwidth]{images/tesselation_on}\\
             \includegraphics[width=0.9\textwidth]{images/tesselation_on_mesh}\\
-            Tessellation off
+            Tessellation on
         \end{column}
     \end{columns}
 \end{frame}
@@ -135,13 +135,22 @@
         \item Pas de prise en charge des textures 3D sous webGL
         \item atomicGL pas adapté pour gérer des tableaux de textures 2D
         \item Limitation du nombre d'appels à \texttt{texture2D} par fragment shader
+        \item Impossibilité d'accéder simplement aux valeurs des pixels d'une image en javascript
     \end{itemize}
 \end{frame}
 \subsection{Résultats}
 \begin{frame}
     \frametitle{Résultats}
-    \centering
-    \includegraphics[scale=0.5]{images/displaced_stone}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.7\textwidth]{images/displaced_stone}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{images/result_perso}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \end{document}
